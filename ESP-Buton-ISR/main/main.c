@@ -13,6 +13,7 @@ static const char *TAG = "ISR_LESSON";
 // ISR ve Main Task arasında paylaşılan değişkenler volatile olmalıdır
 static volatile uint32_t btn_press_count = 0;
 static volatile int64_t last_isr_time = 0; // Debounce (ark) kontrolü için
+static volatile bool led_state = false; // LED durumu
 
 // ISR Fonksiyonu: FLASH yerine RAM'de (IRAM) çalışması şarttır!
 static void IRAM_ATTR gpio_isr_handler(void* arg)
@@ -66,7 +67,9 @@ void app_main(void)
             ESP_LOGI(TAG, "Butona Basıldı! Toplam Sayı: %lu", last_handled_count);
             
             // LED'in durumunu değiştir (Toggle)
-            gpio_set_level(LED_GPIO, last_handled_count % 2);
+            led_state = !led_state;
+            gpio_set_level(LED_GPIO, led_state);
+            //gpio_set_level(LED_GPIO, last_handled_count % 2); // Sayım taşması hata verebilir, bu yüzden led_state kullanıyoruz
         }
 
         vTaskDelay(pdMS_TO_TICKS(50)); // CPU'yu yorma
