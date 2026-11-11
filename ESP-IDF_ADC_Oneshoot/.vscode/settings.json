@@ -32,5 +32,6 @@
     "--background-index",
     "--query-driver=**",
     "--compile-commands-dir=c:\\Users\\aliberkarad\\Desktop\\ESP-IDF Lesson\\ESP-IDF_ADC_Oneshoot\\build"
-  ]
+  ],
+  "idf.flashType": "UART"
 }
