@@ -35,7 +35,17 @@ void app_main(void)
         .atten = ADC_ATTEN_DB_12,
         .bitwidth = ADC_BITWIDTH_DEFAULT,
     };
-    
+    #elif CONFIG_ADC_CALI_SCHEME_CURVE_FITTING_SUPPORTED
+    // Orijinal ESP32 için
+    adc_cali_curve_fitting_config_t kalibrasyon_ayarlari = {
+        .unit_id = ADC_UNIT_1,
+        .chan = AKU_ADC_KANALI,
+        .atten = ADC_ATTEN_DB_12,
+        .bitwidth = ADC_BITWIDTH_DEFAULT,
+    };
+    if (adc_cali_create_scheme_curve_fitting(&kalibrasyon_ayarlari, &kalibrasyon_isleyicisi) == ESP_OK) {
+        kalibrasyon_etkin_mi = true;
+    }
     // Çip fabrikasyon eFuse referans verisini oku ve kalibrasyon şemasını aç
     if (adc_cali_create_scheme_line_fitting(&cali_config, &cali_handle) == ESP_OK) {
         do_calibration = true;
